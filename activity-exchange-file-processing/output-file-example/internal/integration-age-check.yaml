@@ -1,0 +1,10 @@
+---
+deprecated: true
+---
+description: "this is my product"
+team: integration
+productName: age check
+filters:
+  asset_type: "REST API"
+  deprecated: true
+  visibility: "Internal"

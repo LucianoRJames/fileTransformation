@@ -1,0 +1,7 @@
+description: "this is my product"
+team: cis
+productName: get benefit history
+filters:
+  asset_type: "SOAP API"
+  deprecated: true
+  visibility: "Public"
