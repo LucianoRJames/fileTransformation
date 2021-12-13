@@ -1,6 +1,7 @@
 const fs = require("fs-extra");
 const yaml = require("js-yaml");
 const inputFolder = "./activity-exchange-file-processing/input-files";
+const outputFolder = "./activity-exchange-file-processing/output-files";
 
 const getFileNames = (folder) => {
   const inputFiles = [];
@@ -21,6 +22,24 @@ const readFile = (filename) => {
     )
   );
   return data;
+};
+
+const copyFile = (file) => {
+  if (file.filters.visibility === "Internal") {
+    fs.writeFile(
+      outputFolder + "/internal/asset1.yaml",
+      yaml.dump(file),
+      function () {}
+    );
+  } else if (file.filters.visibility === "Public") {
+    fs.writeFile(
+      outputFolder + "/public/asset1.yaml",
+      yaml.dump(file),
+      function () {}
+    );
+  } else {
+    throw new Error("Visibility not found");
+  }
 };
 
 module.exports = {};
