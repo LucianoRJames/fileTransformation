@@ -39,6 +39,6 @@ describe("getFileNames", function () {
         fileTransformation,
         "./activity-exchange-file-processing/input-files-test"
       )
-    ).to.throw("ENOENT: no such file or directory, scandir 'notADirectory'");
+    ).to.throw("The directory is empty");
   });
 });

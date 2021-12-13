@@ -7,6 +7,9 @@ const getFileNames = (folder) => {
   fs.readdirSync(folder).forEach((file) => {
     inputFiles.push(file);
   });
+  if (inputFiles.length === 0) {
+    throw new Error("The directory is empty");
+  }
   return inputFiles;
 };
 
