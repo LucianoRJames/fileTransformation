@@ -13,6 +13,4 @@ const getFileNames = (folder) => {
   return inputFiles;
 };
 
-module.exports = {
-  getFileNames,
-};
+module.exports = {};
