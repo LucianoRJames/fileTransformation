@@ -13,4 +13,14 @@ const getFileNames = (folder) => {
   return inputFiles;
 };
 
+const readFile = (filename) => {
+  const data = yaml.load(
+    fs.readFileSync(
+      "./activity-exchange-file-processing/input-files/" + filename,
+      "utf8"
+    )
+  );
+  return data;
+};
+
 module.exports = {};
