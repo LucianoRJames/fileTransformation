@@ -61,3 +61,36 @@ describe("readFile", function () {
     });
   });
 });
+
+describe("copyFile", function () {
+  const copyFile = fileTransformation.__get__("copyFile");
+  it("Given the function receives a valid file as an object it should run without an error", function () {
+    assert.equal(
+      copyFile({
+        description: "this is my product",
+        filters: {
+          asset_type: "REST API",
+          deprecated: true,
+          visibility: "Internal",
+        },
+        productName: "address finder",
+        team: "integration",
+      }),
+      null
+    );
+  });
+
+  it("Given the function receives a file without visibility, it should return an error", function () {
+    expect(
+      copyFile.bind(fileTransformation, {
+        description: "this is my product",
+        filters: {
+          asset_type: "REST API",
+          deprecated: true,
+        },
+        productName: "address finder",
+        team: "integration",
+      })
+    ).to.throw("Visibility not found");
+  });
+});
