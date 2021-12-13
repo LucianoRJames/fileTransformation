@@ -68,7 +68,7 @@ describe("copyFile", function () {
     assert.equal(
       copyFile({
         description: "this is my product",
-        productName: "address finder",
+        productName: "internal product",
         team: "integration",
         filters: {
           asset_type: "REST API",
@@ -113,9 +113,9 @@ describe("copyFile", function () {
 
 describe("getNewFileName", function () {
   const getNewFileName = fileTransformation.__get__("getNewFileName");
-  it("Given the function receives a file name as a string and a file as an object, it should return a string", function () {
+  it("Given the function receives a file as an object, it should return a string", function () {
     assert.equal(
-      typeof getNewFileName("asset1.yaml", {
+      typeof getNewFileName({
         description: "this is my product",
         productName: "address finder",
         team: "integration",
@@ -128,9 +128,9 @@ describe("getNewFileName", function () {
       "string"
     );
   });
-  it("Given the function receives a file name as a string and a file as an object, it should a new file name in the correct format", function () {
+  it("Given the function receives a file as an object, it should a new file name in the correct format", function () {
     assert.equal(
-      getNewFileName("asset1.yaml", {
+      getNewFileName({
         description: "this is my product",
         productName: "address",
         team: "integration",
@@ -140,12 +140,12 @@ describe("getNewFileName", function () {
           visibility: "Public",
         },
       }),
-      "integration-address-finder.yaml"
+      "integration-address.yaml"
     );
   });
   it("Given the received object has a product name with 2 words, it should a new file name in the correct format", function () {
     assert.equal(
-      getNewFileName("asset1.yaml", {
+      getNewFileName({
         description: "this is my product",
         productName: "address finder",
         team: "integration",
@@ -169,7 +169,7 @@ describe("getNewFileName", function () {
           visibility: "Public",
         },
       })
-    ).to.throw("Team not found");
+    ).to.throw("The file must have a team and a product name");
   });
   it("Given the received object has no productName, it should return an error", function () {
     expect(
@@ -182,6 +182,6 @@ describe("getNewFileName", function () {
           visibility: "Public",
         },
       })
-    ).to.throw("productName not found");
+    ).to.throw("The file must have a team and a product name");
   });
 });

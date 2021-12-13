@@ -25,24 +25,33 @@ const readFile = (filename) => {
 };
 
 const copyFile = (file) => {
+  const filename = getNewFileName(file);
+  if (file.filters.visibility === "Public") {
+    fs.writeFile(
+      outputFolder + "/public/" + filename,
+      yaml.dump(file),
+      function () {}
+    );
+  }
   if (
     file.filters.visibility === "Internal" ||
     file.filters.visibility === "Public"
   ) {
     fs.writeFile(
-      outputFolder + "/internal/asset1.yaml",
-      yaml.dump(file),
-      function () {}
-    );
-  }
-  if (file.filters.visibility === "Public") {
-    fs.writeFile(
-      outputFolder + "/public/asset1.yaml",
+      outputFolder + "/internal/" + filename,
       yaml.dump(file),
       function () {}
     );
   } else {
     throw new Error("Visibility not found");
+  }
+};
+
+const getNewFileName = (file) => {
+  if (file.team && file.productName) {
+    return file.team + "-" + file.productName.replace(" ", "-") + ".yaml";
+  } else {
+    throw new Error("The file must have a team and a product name");
   }
 };
 
