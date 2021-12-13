@@ -30,6 +30,15 @@ describe("getFileNames", function () {
   it("Given the function receives a directory name that doesn't exist, it should return an error", function () {
     expect(
       fileTransformation.getFileNames.bind(fileTransformation, "notADirectory")
-    ).to.throw("Directory not found");
+    ).to.throw("ENOENT: no such file or directory, scandir 'notADirectory'");
+  });
+
+  it("Given the function receives a directory that contains no files, it should return an error", function () {
+    expect(
+      fileTransformation.getFileNames.bind(
+        fileTransformation,
+        "./activity-exchange-file-processing/input-files-test"
+      )
+    ).to.throw("ENOENT: no such file or directory, scandir 'notADirectory'");
   });
 });
