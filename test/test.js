@@ -51,30 +51,30 @@ describe("readFile", function () {
     const result = readFile("asset1.yaml");
     expect(result).to.eql({
       description: "this is my product",
+      productName: "address finder",
+      team: "integration",
       filters: {
         asset_type: "REST API",
         deprecated: true,
         visibility: "Internal",
       },
-      productName: "address finder",
-      team: "integration",
     });
   });
 });
 
 describe("copyFile", function () {
   const copyFile = fileTransformation.__get__("copyFile");
-  it("Given the function receives a valid file as an object it should run without an error", function () {
+  it("Given the function receives a valid file as an object with internal visibility, it should run without an error", function () {
     assert.equal(
       copyFile({
         description: "this is my product",
+        productName: "address finder",
+        team: "integration",
         filters: {
           asset_type: "REST API",
           deprecated: true,
           visibility: "Internal",
         },
-        productName: "address finder",
-        team: "integration",
       }),
       null
     );
@@ -84,13 +84,104 @@ describe("copyFile", function () {
     expect(
       copyFile.bind(fileTransformation, {
         description: "this is my product",
+        productName: "address finder",
+        team: "integration",
         filters: {
           asset_type: "REST API",
           deprecated: true,
         },
-        productName: "address finder",
-        team: "integration",
       })
     ).to.throw("Visibility not found");
+  });
+
+  it("Given the function receives a valid file as an object with public visibility, it should run without an error", function () {
+    assert.equal(
+      copyFile({
+        description: "this is my product",
+        productName: "address finder",
+        team: "integration",
+        filters: {
+          asset_type: "REST API",
+          deprecated: true,
+          visibility: "Public",
+        },
+      }),
+      null
+    );
+  });
+});
+
+describe("getNewFileName", function () {
+  const getNewFileName = fileTransformation.__get__("getNewFileName");
+  it("Given the function receives a file name as a string and a file as an object, it should return a string", function () {
+    assert.equal(
+      typeof getNewFileName("asset1.yaml", {
+        description: "this is my product",
+        productName: "address finder",
+        team: "integration",
+        filters: {
+          asset_type: "REST API",
+          deprecated: true,
+          visibility: "Public",
+        },
+      }),
+      "string"
+    );
+  });
+  it("Given the function receives a file name as a string and a file as an object, it should a new file name in the correct format", function () {
+    assert.equal(
+      getNewFileName("asset1.yaml", {
+        description: "this is my product",
+        productName: "address",
+        team: "integration",
+        filters: {
+          asset_type: "REST API",
+          deprecated: true,
+          visibility: "Public",
+        },
+      }),
+      "integration-address-finder.yaml"
+    );
+  });
+  it("Given the received object has a product name with 2 words, it should a new file name in the correct format", function () {
+    assert.equal(
+      getNewFileName("asset1.yaml", {
+        description: "this is my product",
+        productName: "address finder",
+        team: "integration",
+        filters: {
+          asset_type: "REST API",
+          deprecated: true,
+          visibility: "Public",
+        },
+      }),
+      "integration-address-finder.yaml"
+    );
+  });
+  it("Given the received object has no team, it should return an error", function () {
+    expect(
+      getNewFileName.bind(fileTransformation, {
+        description: "this is my product",
+        productName: "address finder",
+        filters: {
+          asset_type: "REST API",
+          deprecated: true,
+          visibility: "Public",
+        },
+      })
+    ).to.throw("Team not found");
+  });
+  it("Given the received object has no productName, it should return an error", function () {
+    expect(
+      getNewFileName.bind(fileTransformation, {
+        description: "this is my product",
+        team: "integration",
+        filters: {
+          asset_type: "REST API",
+          deprecated: true,
+          visibility: "Public",
+        },
+      })
+    ).to.throw("productName not found");
   });
 });

@@ -25,13 +25,17 @@ const readFile = (filename) => {
 };
 
 const copyFile = (file) => {
-  if (file.filters.visibility === "Internal") {
+  if (
+    file.filters.visibility === "Internal" ||
+    file.filters.visibility === "Public"
+  ) {
     fs.writeFile(
       outputFolder + "/internal/asset1.yaml",
       yaml.dump(file),
       function () {}
     );
-  } else if (file.filters.visibility === "Public") {
+  }
+  if (file.filters.visibility === "Public") {
     fs.writeFile(
       outputFolder + "/public/asset1.yaml",
       yaml.dump(file),
