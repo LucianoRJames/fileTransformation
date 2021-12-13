@@ -185,3 +185,10 @@ describe("getNewFileName", function () {
     ).to.throw("The file must have a team and a product name");
   });
 });
+
+describe("addDeprication", function () {
+  const addDeprication = fileTransformation.__get__("addDeprication");
+  it("Given the function receives a valid file name as a string, it should run without an error", function () {
+    assert.equal(addDeprication("integration-address-finder.yaml"), null);
+  });
+});
