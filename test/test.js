@@ -8,7 +8,7 @@ describe("getFileNames", function () {
     assert.equal(
       Array.isArray(
         fileTransformation.getFileNames(
-          "activity-exchange-file-processing/input-files"
+          "./activity-exchange-file-processing/input-files"
         )
       ),
       true
@@ -17,7 +17,7 @@ describe("getFileNames", function () {
 
   it("Given the function receives a directory name as a string it should return all of the files in the directory as an array", function () {
     const result = fileTransformation.getFileNames(
-      "activity-exchange-file-processing/input-files"
+      "./activity-exchange-file-processing/input-files"
     );
     expect(result).to.eql([
       "asset1.yaml",
