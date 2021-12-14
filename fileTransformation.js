@@ -31,17 +31,15 @@ const readFileIntoYamlObject = (filename) => {
 // add in sub directory creation as new function
 const writeObjectToFile = (file) => {
   const filename = getNewFileName(file);
-  if (file.filters.visibility === "Public") {
+  const visibility = file.filters.visibility;
+  if (visibility === "public") {
     fs.writeFile(
-      outputFolder + "/public/" + filename,
+      outputFolder + "/Public/" + filename,
       yaml.dump(file),
       function () {}
     );
   }
-  if (
-    file.filters.visibility === "Internal" ||
-    file.filters.visibility === "Public"
-  ) {
+  if (visibility === "Internal" || visibility === "Public") {
     fs.writeFile(
       outputFolder + "/internal/" + filename,
       yaml.dump(file),

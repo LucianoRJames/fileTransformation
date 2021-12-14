@@ -259,41 +259,6 @@ describe("getNewFileName", function () {
   });
 });
 
-describe("createDirectory", function () {
-  const createDirectory = fileTransformation.__get__("createDirectory");
-  it("Given the function receives a valid file as an object with internal visibility, it should run without an error", function () {
-    assert.equal(
-      createDirectory({
-        description: "this is my product",
-        productName: "internal product",
-        team: "integration",
-        filters: {
-          asset_type: "REST API",
-          deprecated: true,
-          visibility: "Internal",
-        },
-      }),
-      null
-    );
-  });
-
-  it("Given the function receives a valid file as an object with public visibility, it should run without an error", function () {
-    assert.equal(
-      createDirectory({
-        description: "this is my product",
-        productName: "address finder",
-        team: "integration",
-        filters: {
-          asset_type: "REST API",
-          deprecated: true,
-          visibility: "Public",
-        },
-      }),
-      null
-    );
-  });
-});
-
 // describe("addDeprication", function () {
 //   const addDeprication = fileTransformation.__get__("addDeprication");
 //   it("Given the function receives a valid file name as a string, it should run without an error", function () {
