@@ -62,5 +62,26 @@ const getNewFileName = (file) => {
     throw new Error("The file must have a team and a product name");
   }
 };
+const addDeprication = (filename, visibility) => {
+  visibility = visibility.toLowerCase();
+  const fileByLine = fs
+    .readFileSync(outputFolder + "/internal/" + filename)
+    .toString()
+    .split("\n");
+
+  fileByLine.unshift("---");
+  fileByLine.unshift("depricated: true");
+  fileByLine.unshift("---");
+  if (visibility === "public") {
+    fs.writeFileSync(
+      outputFolder + "/public/" + filename,
+      fileByLine.join("\n")
+    );
+  }
+  fs.writeFileSync(
+    outputFolder + "/internal/" + filename,
+    fileByLine.join("\n")
+  );
+};
 
 module.exports = {};
