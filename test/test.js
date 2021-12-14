@@ -198,6 +198,38 @@ describe("getNewFileName", function () {
       "integration-address-finder-test.yaml"
     );
   });
+
+  it("Given the received object has a team with 2 words, it should a new file name in the correct format", function () {
+    assert.equal(
+      getNewFileName({
+        description: "this is my product",
+        productName: "address",
+        team: "integration test",
+        filters: {
+          asset_type: "REST API",
+          deprecated: true,
+          visibility: "Public",
+        },
+      }),
+      "integration-test-address.yaml"
+    );
+  });
+
+  it("Given the received object has a team with 3 words, it should a new file name in the correct format", function () {
+    assert.equal(
+      getNewFileName({
+        description: "this is my product",
+        productName: "address",
+        team: "integration test case",
+        filters: {
+          asset_type: "REST API",
+          deprecated: true,
+          visibility: "Public",
+        },
+      }),
+      "integration-test-case-address.yaml"
+    );
+  });
   // add 3 name product name test, case tests, double team name
   it("Given the received object has no team, it should return an error", function () {
     expect(
