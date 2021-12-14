@@ -54,7 +54,12 @@ const writeObjectToFile = (file) => {
 
 const getNewFileName = (file) => {
   if (file.team && file.productName) {
-    return file.team + "-" + file.productName.split(" ").join("-") + ".yaml";
+    return (
+      file.team.split(" ").join("-") +
+      "-" +
+      file.productName.split(" ").join("-") +
+      ".yaml"
+    );
   } else {
     throw new Error("The file must have a team and a product name");
   }
