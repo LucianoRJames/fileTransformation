@@ -230,7 +230,7 @@ describe("getNewFileName", function () {
       "integration-test-case-address.yaml"
     );
   });
-  // add 3 name product name test, case tests, double team name
+
   it("Given the received object has no team, it should return an error", function () {
     expect(
       getNewFileName.bind(fileTransformation, {
@@ -256,6 +256,41 @@ describe("getNewFileName", function () {
         },
       })
     ).to.throw("The file must have a team and a product name");
+  });
+});
+
+describe("createDirectory", function () {
+  const createDirectory = fileTransformation.__get__("createDirectory");
+  it("Given the function receives a valid file as an object with internal visibility, it should run without an error", function () {
+    assert.equal(
+      createDirectory({
+        description: "this is my product",
+        productName: "internal product",
+        team: "integration",
+        filters: {
+          asset_type: "REST API",
+          deprecated: true,
+          visibility: "Internal",
+        },
+      }),
+      null
+    );
+  });
+
+  it("Given the function receives a valid file as an object with public visibility, it should run without an error", function () {
+    assert.equal(
+      createDirectory({
+        description: "this is my product",
+        productName: "address finder",
+        team: "integration",
+        filters: {
+          asset_type: "REST API",
+          deprecated: true,
+          visibility: "Public",
+        },
+      }),
+      null
+    );
   });
 });
 
