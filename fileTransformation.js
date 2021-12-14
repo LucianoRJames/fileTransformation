@@ -5,16 +5,20 @@ const outputFolder = "./activity-exchange-file-processing/output-files";
 
 const getFileNames = (folder) => {
   const inputFiles = [];
-  fs.readdirSync(folder).forEach((file) => {
-    inputFiles.push(file);
-  });
+  try {
+    fs.readdirSync(folder).forEach((file) => {
+      inputFiles.push(file);
+    });
+  } catch {
+    throw new Error("The directory doesn't exist");
+  }
   if (inputFiles.length === 0) {
     throw new Error("The directory is empty");
   }
   return inputFiles;
 };
 
-const readFile = (filename) => {
+const readFileIntoYamlObject = (filename) => {
   const data = yaml.load(
     fs.readFileSync(
       "./activity-exchange-file-processing/input-files/" + filename,
@@ -24,7 +28,8 @@ const readFile = (filename) => {
   return data;
 };
 
-const copyFile = (file) => {
+// add in sub directory creation as new function
+const writeObjectToFile = (file) => {
   const filename = getNewFileName(file);
   if (file.filters.visibility === "Public") {
     fs.writeFile(
