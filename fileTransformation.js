@@ -32,9 +32,9 @@ const readFileIntoYamlObject = (filename) => {
 const writeObjectToFile = (file) => {
   const filename = getNewFileName(file);
   const visibility = file.filters.visibility;
-  if (visibility === "public") {
+  if (visibility === "Public") {
     fs.writeFile(
-      outputFolder + "/Public/" + filename,
+      outputFolder + "/public/" + filename,
       yaml.dump(file),
       function () {}
     );

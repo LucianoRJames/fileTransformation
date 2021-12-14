@@ -259,9 +259,28 @@ describe("getNewFileName", function () {
   });
 });
 
-// describe("addDeprication", function () {
-//   const addDeprication = fileTransformation.__get__("addDeprication");
-//   it("Given the function receives a valid file name as a string, it should run without an error", function () {
-//     assert.equal(addDeprication("integration-address-finder.yaml"), null);
-//   });
-// });
+describe("addDeprication", function () {
+  const addDeprication = fileTransformation.__get__("addDeprication");
+  it("Given the function receives a valid file name as a string and a public visibility, it should run without an error", function () {
+    assert.equal(
+      addDeprication("integration-address-finder.yaml", "public"),
+      null
+    );
+  });
+  it("Given the function receives a valid file name as a string and a internal visibility, it should run without an error", function () {
+    assert.equal(
+      addDeprication("integration-internal-product.yaml", "internal"),
+      null
+    );
+  });
+  it("Given the function receives a valid file name as a string, add the correct lines to the file", function () {
+    const testObject = fs.readFileSync(
+      "./activity-exchange-file-processing/output-files/public/integration-address-finder.yaml",
+      "utf8"
+    );
+
+    expect(testObject).to.eql(
+      "---\ndepricated: true\n---\n---\ndepricated: true\n---\ndescription: this is my product\nproductName: address finder\nteam: integration\nfilters:\n  asset_type: REST API\n  deprecated: true\n  visibility: Public\n"
+    );
+  });
+});
