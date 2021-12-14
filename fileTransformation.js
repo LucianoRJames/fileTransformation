@@ -3,6 +3,22 @@ const yaml = require("js-yaml");
 const inputFolder = "./activity-exchange-file-processing/input-files";
 const outputFolder = "./activity-exchange-file-processing/output-files";
 
+const fileTransformation = (inputFolder, outputFolder) => {
+  const fileNames = getFileNames(inputFolder);
+  fileNames.forEach((filename) => {
+    const fileAsObject = readFileIntoYamlObject(filename);
+    const updatedFileName = getNewFileName(fileAsObject);
+    const visibility = fileAsObject.filters.visibility;
+    const depricatedFile = addDeprecation(fileAsObject);
+    writeObjectToFile(
+      depricatedFile,
+      updatedFileName,
+      visibility,
+      outputFolder
+    );
+  });
+};
+
 const getFileNames = (folder) => {
   const inputFiles = [];
   try {
@@ -28,23 +44,12 @@ const readFileIntoYamlObject = (filename) => {
   return data;
 };
 
-// add in sub directory creation as new function
-const writeObjectToFile = (file) => {
-  const filename = getNewFileName(file);
-  const visibility = file.filters.visibility;
+const writeObjectToFile = (file, filename, visibility, outputPath) => {
   if (visibility === "Public") {
-    fs.writeFile(
-      outputFolder + "/public/" + filename,
-      yaml.dump(file),
-      function () {}
-    );
+    fs.writeFile(outputPath + "/public/" + filename, file, function () {});
   }
   if (visibility === "Internal" || visibility === "Public") {
-    fs.writeFile(
-      outputFolder + "/internal/" + filename,
-      yaml.dump(file),
-      function () {}
-    );
+    fs.writeFile(outputPath + "/internal/" + filename, file, function () {});
   } else {
     throw new Error("Visibility not found");
   }
@@ -62,26 +67,20 @@ const getNewFileName = (file) => {
     throw new Error("The file must have a team and a product name");
   }
 };
-const addDeprication = (filename, visibility) => {
-  visibility = visibility.toLowerCase();
-  const fileByLine = fs
-    .readFileSync(outputFolder + "/internal/" + filename)
-    .toString()
-    .split("\n");
+const addDeprecation = (file) => {
+  const fileByLine = yaml.dump(file).split("\n");
 
   fileByLine.unshift("---");
-  fileByLine.unshift("depricated: true");
-  fileByLine.unshift("---");
-  if (visibility === "public") {
-    fs.writeFileSync(
-      outputFolder + "/public/" + filename,
-      fileByLine.join("\n")
-    );
+  if (file.filters.deprecated) {
+    fileByLine.unshift("deprecated: " + file.filters.deprecated);
+  } else {
+    fileByLine.unshift("deprecated: false");
   }
-  fs.writeFileSync(
-    outputFolder + "/internal/" + filename,
-    fileByLine.join("\n")
-  );
+  fileByLine.unshift("---");
+  return fileByLine.join("\n");
 };
 
-module.exports = {};
+fileTransformation(inputFolder, outputFolder);
+module.exports = {
+  fileTransformation,
+};

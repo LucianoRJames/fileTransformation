@@ -259,17 +259,17 @@ describe("getNewFileName", function () {
   });
 });
 
-describe("addDeprication", function () {
-  const addDeprication = fileTransformation.__get__("addDeprication");
+describe("addDeprecation", function () {
+  const addDeprecation = fileTransformation.__get__("addDeprecation");
   it("Given the function receives a valid file name as a string and a public visibility, it should run without an error", function () {
     assert.equal(
-      addDeprication("integration-address-finder.yaml", "Public"),
+      addDeprecation("integration-address-finder.yaml", "Public"),
       null
     );
   });
   it("Given the function receives a valid file name as a string and a internal visibility, it should run without an error", function () {
     assert.equal(
-      addDeprication("integration-internal-product.yaml", "Internal"),
+      addDeprecation("integration-internal-product.yaml", "Internal"),
       null
     );
   });
@@ -280,6 +280,18 @@ describe("addDeprication", function () {
     );
     expect(testObject).to.eql(
       "---\ndepricated: true\n---\ndescription: this is my product\nproductName: address finder\nteam: integration\nfilters:\n  asset_type: REST API\n  deprecated: true\n  visibility: Public\n"
+    );
+  });
+});
+
+describe("fileTransformation", function () {
+  it("If the function receives an input file path as a string and an output file path as a string, it should return with no errors", function () {
+    assert.equal(
+      fileTransformation.fileTransformation(
+        "./activity-exchange-file-processing/input-files",
+        "./activity-exchange-file-processing/output-files"
+      ),
+      null
     );
   });
 });
