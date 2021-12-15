@@ -5,6 +5,30 @@ const { expect } = require("chai");
 const rewire = require("rewire");
 const fileTransformation = rewire("../fileTransformation");
 
+describe("copyInputFilesToOutput", function () {
+  it("Given the function receives an input file path as a string and an output file path as a string, it should return with no errors", function () {
+    assert.equal(
+      fileTransformation.copyInputFilesToOutput(
+        "./activity-exchange-file-processing/input-files",
+        "./activity-exchange-file-processing/output-files"
+      ),
+      null
+    );
+  });
+});
+
+describe("copyOutputFilesToInput", function () {
+  it("Given the function receives an input file path as a string and an output file path as a string, it should return with no errors", function () {
+    assert.equal(
+      fileTransformation.copyOutputFilesToInput(
+        "./activity-exchange-file-processing/input-files",
+        "./activity-exchange-file-processing/output-files"
+      ),
+      null
+    );
+  });
+});
+
 describe("getFileNames", function () {
   const getFileNames = fileTransformation.__get__("getFileNames");
   it("Given the function receives a directory name as a string it should return an array", function () {
@@ -363,18 +387,6 @@ describe("addDeprecation", function () {
         "filters:\n" +
         "  asset_type: REST API\n" +
         "  visibility: Public\n"
-    );
-  });
-});
-
-describe("fileTransformation", function () {
-  it("Given the function receives an input file path as a string and an output file path as a string, it should return with no errors", function () {
-    assert.equal(
-      fileTransformation.fileTransformation(
-        "./activity-exchange-file-processing/input-files",
-        "./activity-exchange-file-processing/output-files"
-      ),
-      null
     );
   });
 });

@@ -3,7 +3,7 @@ const yaml = require("js-yaml");
 const inputFolder = "./activity-exchange-file-processing/input-files";
 const outputFolder = "./activity-exchange-file-processing/output-files";
 
-const fileTransformation = (inputFolder, outputFolder) => {
+const copyInputFilesToOutput = (inputFolder, outputFolder) => {
   const fileNames = getFileNames(inputFolder);
   fileNames.forEach((filename) => {
     const fileAsObject = readFileIntoYamlObject(filename);
@@ -106,7 +106,7 @@ const createDirectory = (filepath) => {
   }
 };
 
-fileTransformation(inputFolder, outputFolder);
+copyInputFilesToOutput(inputFolder, outputFolder);
 module.exports = {
-  fileTransformation,
+  copyInputFilesToOutput,
 };
