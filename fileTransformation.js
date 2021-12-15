@@ -93,6 +93,13 @@ const getInputFilename = (filenames) => {
   return newFileName;
 };
 
+const removeDeprecation = (file) => {
+  const endIndexOfDeprecation = 3;
+  let fileByLine = file.split("\n");
+  fileByLine = fileByLine.splice(endIndexOfDeprecation, fileByLine.length - 1);
+  return fileByLine.join("\n");
+};
+
 fileTransformation(inputFolder, outputFolder);
 module.exports = {
   fileTransformation,
