@@ -19,6 +19,17 @@ const copyInputFilesToOutput = (inputFolder, outputFolder) => {
   });
 };
 
+const copyOutputFilesToInput = (inputFolder, outputFolder) => {
+  const fileNames = getFileNames(outputFolder);
+  fileNames.forEach((filename) => {
+    const inputFiles = getFileNames(inputFolder);
+    const fileAsObject = readFileIntoYamlObject(filename);
+    const updatedFileName = getInputFilename(inputFiles);
+    const undepricatedFile = removeDeprecation(fileAsObject);
+    writeObjectToFile(undepricatedFile, updatedFileName, inputFolder);
+  });
+};
+
 const getFileNames = (folder) => {
   const inputFiles = [];
   try {
@@ -106,7 +117,6 @@ const createDirectory = (filepath) => {
   }
 };
 
-copyInputFilesToOutput(inputFolder, outputFolder);
 module.exports = {
   copyInputFilesToOutput,
 };

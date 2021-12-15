@@ -21,7 +21,7 @@ describe("copyOutputFilesToInput", function () {
   it("Given the function receives an input file path as a string and an output file path as a string, it should return with no errors", function () {
     assert.equal(
       fileTransformation.copyOutputFilesToInput(
-        "./activity-exchange-file-processing/input-files",
+        "./activity-exchange-file-processing/input-files2",
         "./activity-exchange-file-processing/output-files"
       ),
       null
