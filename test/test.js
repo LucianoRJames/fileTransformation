@@ -438,3 +438,21 @@ describe("getInputFilename", function () {
     assert.equal(getInputFilename([]), "asset1.yaml");
   });
 });
+
+describe("createDirectory", function () {
+  const createDirectory = fileTransformation.__get__("createDirectory");
+  it("Given the function receives a filepath as a string, it should run without errors ", function () {
+    assert.equal(
+      createDirectory("./activity-exchange-file-processing/new-input-files"),
+      null
+    );
+  });
+  it("Given the function receives a filepath as a string, it should create a folder using the directory at the end of the path as a name ", function () {
+    createDirectory("./activity-exchange-file-processing/new-input-files-test");
+    let folderName;
+    fs.readdirSync(folder).forEach((file) => {
+      if (file === "new-input-files-test") folderName;
+    });
+    assert.equal(folderName, "new-input-files-test");
+  });
+});
