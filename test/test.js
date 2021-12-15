@@ -106,31 +106,10 @@ describe("writeObjectToFile", function () {
           "  deprecated: true\n" +
           "  visibility: Internal\n",
         "integration-address-finder-test",
-        "Internal",
-        "./activity-exchange-file-processing/output-files"
+        "./activity-exchange-file-processing/output-files/internal"
       ),
       null
     );
-  });
-
-  it("Given the function receives a file without visibility, it should return an error", function () {
-    expect(
-      writeObjectToFile.bind(
-        fileTransformation,
-        "---\n" +
-          "deprecated: true\n" +
-          "---\n" +
-          "description: this is my product\n" +
-          "productName: address finder test\n" +
-          "team: integration\n" +
-          "filters:\n" +
-          "  asset_type: REST API\n" +
-          "  deprecated: true\n" +
-          "integration-address-finder-test",
-        null,
-        "./activity-exchange-file-processing/output-files"
-      )
-    ).to.throw("Visibility not found");
   });
 
   it("Given the function receives a valid file as an object with public visibility, it should run without an error", function () {
@@ -147,8 +126,7 @@ describe("writeObjectToFile", function () {
           "  deprecated: true\n" +
           "  visibility: Public\n",
         "integration-test",
-        "Public",
-        "./activity-exchange-file-processing/output-files"
+        "./activity-exchange-file-processing/output-files/public"
       ),
       null
     );
@@ -468,5 +446,42 @@ describe("createDirectory", function () {
       }
     });
     assert.equal(folderName, "new-input-files-test");
+  });
+});
+
+describe("getFilepath", function () {
+  const getFilepath = fileTransformation.__get__("getFilepath");
+  it("Given the function receives a valid file as an object with a valid visibility, it should return a string", function () {
+    assert.equal(
+      typeof getFilepath(
+        "Internal",
+        "./activity-exchange-file-processing/output-files"
+      ),
+      "string"
+    );
+  });
+  it("Given the function receives an Internal visibility, it should return the internal filepath as a string", function () {
+    assert.equal(
+      getFilepath(
+        "Internal",
+        "./activity-exchange-file-processing/output-files"
+      ),
+      "./activity-exchange-file-processing/output-files/internal"
+    );
+  });
+  it("Given the function receives a Public visibility, it should return the public filepath as a string", function () {
+    assert.equal(
+      getFilepath("Public", "./activity-exchange-file-processing/output-files"),
+      "./activity-exchange-file-processing/output-files/public"
+    );
+  });
+  it("Given the function receives a null visibility, it should return an error", function () {
+    expect(
+      getFilepath.bind(
+        fileTransformation,
+        null,
+        "./activity-exchange-file-processing/output-files"
+      )
+    ).to.throw("Visibility not found");
   });
 });

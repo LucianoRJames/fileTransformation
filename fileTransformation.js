@@ -10,12 +10,14 @@ const copyInputFilesToOutput = (inputFolder, outputFolder) => {
     const updatedFileName = getNewFileName(fileAsObject);
     const visibility = fileAsObject.filters.visibility;
     const depricatedFile = addDeprecation(fileAsObject);
-    writeObjectToFile(
-      depricatedFile,
-      updatedFileName,
-      visibility,
-      outputFolder
-    );
+    if (visibility === "Public") {
+      writeObjectToFile(depricatedFile, updatedFileName, outputFolder);
+    }
+    if (visibility === "Internal" || visibility === "Public") {
+      writeObjectToFile(depricatedFile, updatedFileName, outputFolder);
+    } else {
+      throw new Error("Visibility not found");
+    }
   });
 };
 
@@ -26,6 +28,7 @@ const copyOutputFilesToInput = (inputFolder, outputFolder) => {
     const fileAsObject = readFileIntoYamlObject(filename);
     const updatedFileName = getInputFilename(inputFiles);
     const undepricatedFile = removeDeprecation(fileAsObject);
+    createDirectory(inputFolder);
     writeObjectToFile(undepricatedFile, updatedFileName, inputFolder);
   });
 };
@@ -55,15 +58,8 @@ const readFileIntoYamlObject = (filename) => {
   return data;
 };
 
-const writeObjectToFile = (file, filename, visibility, outputPath) => {
-  if (visibility === "Public") {
-    fs.writeFile(outputPath + "/public/" + filename, file, function () {});
-  }
-  if (visibility === "Internal" || visibility === "Public") {
-    fs.writeFile(outputPath + "/internal/" + filename, file, function () {});
-  } else {
-    throw new Error("Visibility not found");
-  }
+const writeObjectToFile = (file, filename, outputPath) => {
+  fs.writeFile(outputPath + filename, file, function () {});
 };
 
 const getNewFileName = (file) => {
