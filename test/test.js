@@ -116,13 +116,13 @@ describe("writeObjectToFile", function () {
           "deprecated: true\n" +
           "---\n" +
           "description: this is my product\n" +
-          "productName: address finder test\n" +
+          "productName: test\n" +
           "team: integration\n" +
           "filters:\n" +
           "  asset_type: REST API\n" +
           "  deprecated: true\n" +
           "  visibility: Public\n",
-        "integration-address-finder-test",
+        "integration-test",
         "Public",
         "./activity-exchange-file-processing/output-files"
       ),
@@ -375,6 +375,47 @@ describe("fileTransformation", function () {
         "./activity-exchange-file-processing/output-files"
       ),
       null
+    );
+  });
+});
+
+describe("removeDeprecation", function () {
+  const removeDeprecation = fileTransformation.__get__("removeDeprecation");
+  it("If the function receives a file as a string, it should return a string", function () {
+    assert.equal(
+      typeof removeDeprecation(
+        "---\n" +
+          "deprecated: false\n" +
+          "---\n" +
+          "description: this is my product\n" +
+          "productName: address finder test\n" +
+          "team: integration\n" +
+          "filters:\n" +
+          "  asset_type: REST API\n" +
+          "  visibility: Public\n"
+      ),
+      "string"
+    );
+  });
+  it("If the function receives a file as a string, it should return the string without the deprecated header", function () {
+    assert.equal(
+      removeDeprecation(
+        "---\n" +
+          "deprecated: false\n" +
+          "---\n" +
+          "description: this is my product\n" +
+          "productName: address finder test\n" +
+          "team: integration\n" +
+          "filters:\n" +
+          "  asset_type: REST API\n" +
+          "  visibility: Public\n"
+      ),
+      "description: this is my product\n" +
+        "productName: address finder test\n" +
+        "team: integration\n" +
+        "filters:\n" +
+        "  asset_type: REST API\n" +
+        "  visibility: Public\n"
     );
   });
 });
