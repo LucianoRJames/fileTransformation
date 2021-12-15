@@ -368,7 +368,7 @@ describe("addDeprecation", function () {
 });
 
 describe("fileTransformation", function () {
-  it("If the function receives an input file path as a string and an output file path as a string, it should return with no errors", function () {
+  it("Given the function receives an input file path as a string and an output file path as a string, it should return with no errors", function () {
     assert.equal(
       fileTransformation.fileTransformation(
         "./activity-exchange-file-processing/input-files",
@@ -381,7 +381,7 @@ describe("fileTransformation", function () {
 
 describe("removeDeprecation", function () {
   const removeDeprecation = fileTransformation.__get__("removeDeprecation");
-  it("If the function receives a file as a string, it should return a string", function () {
+  it("Given the function receives a file as a string, it should return a string", function () {
     assert.equal(
       typeof removeDeprecation(
         "---\n" +
@@ -397,7 +397,7 @@ describe("removeDeprecation", function () {
       "string"
     );
   });
-  it("If the function receives a file as a string, it should return the string without the deprecated header", function () {
+  it("Given the function receives a file as a string, it should return the string without the deprecated header", function () {
     assert.equal(
       removeDeprecation(
         "---\n" +
@@ -417,5 +417,24 @@ describe("removeDeprecation", function () {
         "  asset_type: REST API\n" +
         "  visibility: Public\n"
     );
+  });
+});
+
+describe("getInputFilename", function () {
+  const getInputFilename = fileTransformation.__get__("getInputFilename");
+  it("Given the function receives an array of filenames as strings, it should return a string", function () {
+    assert.equal(
+      typeof getInputFilename(["asset1.yaml", "asset2.yaml"]),
+      "string"
+    );
+  });
+  it("Given the function receives an array of filenames as strings, it should return a new filename as string with the string being in the format 'asset[number].yaml' ", function () {
+    assert.equal(
+      getInputFilename(["asset1.yaml", "asset2.yaml"]),
+      "asset3.yaml"
+    );
+  });
+  it("Given the function receives an empty array , it should return a new filename as string with the string being 'asset1.yaml' ", function () {
+    assert.equal(getInputFilename([]), "asset1.yaml");
   });
 });
