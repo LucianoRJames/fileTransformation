@@ -450,8 +450,10 @@ describe("createDirectory", function () {
   it("Given the function receives a filepath as a string, it should create a folder using the directory at the end of the path as a name ", function () {
     createDirectory("./activity-exchange-file-processing/new-input-files-test");
     let folderName;
-    fs.readdirSync(folder).forEach((file) => {
-      if (file === "new-input-files-test") folderName;
+    fs.readdirSync("./activity-exchange-file-processing").forEach((file) => {
+      if (file === "new-input-files-test") {
+        folderName = file;
+      }
     });
     assert.equal(folderName, "new-input-files-test");
   });

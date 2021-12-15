@@ -100,6 +100,12 @@ const removeDeprecation = (file) => {
   return fileByLine.join("\n");
 };
 
+const createDirectory = (filepath) => {
+  if (!fs.existsSync(filepath)) {
+    fs.mkdirSync(filepath);
+  }
+};
+
 fileTransformation(inputFolder, outputFolder);
 module.exports = {
   fileTransformation,
