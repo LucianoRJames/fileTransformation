@@ -80,6 +80,19 @@ const addDeprecation = (file) => {
   return fileByLine.join("\n");
 };
 
+const getInputFilename = (filenames) => {
+  let newFileName;
+  const numberRegex = /[0-9]+/;
+  filenames = filenames.sort();
+  if (filenames.length === 0) {
+    newFileName = "asset1.yaml";
+  } else {
+    const filenumber = filenames[filenames.length - 1].match(numberRegex);
+    newFileName = "asset" + (parseInt(filenumber) + 1) + ".yaml";
+  }
+  return newFileName;
+};
+
 fileTransformation(inputFolder, outputFolder);
 module.exports = {
   fileTransformation,
