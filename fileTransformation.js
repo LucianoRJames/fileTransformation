@@ -6,30 +6,27 @@ const outputFolder = "./activity-exchange-file-processing/output-files";
 const copyInputFilesToOutput = (inputFolder, outputFolder) => {
   const fileNames = getFileNames(inputFolder);
   fileNames.forEach((filename) => {
-    const fileAsObject = readFileIntoYamlObject(filename);
+    const fileAsObject = readFileIntoYamlObject(inputFolder, filename)[0];
     const updatedFileName = getNewFileName(fileAsObject);
     const visibility = fileAsObject.filters.visibility;
     const depricatedFile = addDeprecation(fileAsObject);
+    let outputPath = getFilepath(outputFolder, visibility);
     if (visibility === "Public") {
-      writeObjectToFile(depricatedFile, updatedFileName, outputFolder);
+      writeObjectToFile(depricatedFile, updatedFileName, outputPath);
+      outputPath = getFilepath(outputFolder, "Internal");
     }
-    if (visibility === "Internal" || visibility === "Public") {
-      writeObjectToFile(depricatedFile, updatedFileName, outputFolder);
-    } else {
-      throw new Error("Visibility not found");
-    }
+    writeObjectToFile(depricatedFile, updatedFileName, outputPath);
   });
 };
 
-const copyOutputFilesToInput = (inputFolder, outputFolder) => {
-  const fileNames = getFileNames(outputFolder);
+const copyOutputFilesToInput = (inputDirectory, outputDirectory) => {
+  const fileNames = getFileNames(outputDirectory);
+  createDirectory(inputDirectory);
   fileNames.forEach((filename) => {
-    const inputFiles = getFileNames(inputFolder);
-    const fileAsObject = readFileIntoYamlObject(filename);
+    const inputFiles = getFileNames(inputDirectory);
+    const fileAsObject = readFileIntoYamlObject(outputDirectory, filename)[1];
     const updatedFileName = getInputFilename(inputFiles);
-    const undepricatedFile = removeDeprecation(fileAsObject);
-    createDirectory(inputFolder);
-    writeObjectToFile(undepricatedFile, updatedFileName, inputFolder);
+    writeObjectToFile(yaml.dump(fileAsObject), updatedFileName, inputDirectory);
   });
 };
 
@@ -42,24 +39,16 @@ const getFileNames = (folder) => {
   } catch {
     throw new Error("The directory doesn't exist");
   }
-  if (inputFiles.length === 0) {
-    throw new Error("The directory is empty");
-  }
   return inputFiles;
 };
 
-const readFileIntoYamlObject = (filename) => {
-  const data = yaml.load(
-    fs.readFileSync(
-      "./activity-exchange-file-processing/input-files/" + filename,
-      "utf8"
-    )
-  );
+const readFileIntoYamlObject = (filepath, filename) => {
+  const data = yaml.loadAll(fs.readFileSync(filepath + "/" + filename, "utf8"));
   return data;
 };
 
 const writeObjectToFile = (file, filename, outputPath) => {
-  fs.writeFile(outputPath + filename, file, function () {});
+  fs.writeFileSync(outputPath + filename, file, function () {});
 };
 
 const getNewFileName = (file) => {
@@ -100,19 +89,21 @@ const getInputFilename = (filenames) => {
   return newFileName;
 };
 
-const removeDeprecation = (file) => {
-  const endIndexOfDeprecation = 3;
-  let fileByLine = file.split("\n");
-  fileByLine = fileByLine.splice(endIndexOfDeprecation, fileByLine.length - 1);
-  return fileByLine.join("\n");
-};
-
 const createDirectory = (filepath) => {
   if (!fs.existsSync(filepath)) {
     fs.mkdirSync(filepath);
   }
 };
 
+const getFilepath = (outputPath, visibility) => {
+  try {
+    return outputPath + "/" + visibility.toLowerCase() + "/";
+  } catch {
+    throw new Error("Visibility not found");
+  }
+};
+
 module.exports = {
   copyInputFilesToOutput,
+  copyOutputFilesToInput,
 };

@@ -21,8 +21,8 @@ describe("copyOutputFilesToInput", function () {
   it("Given the function receives an input file path as a string and an output file path as a string, it should return with no errors", function () {
     assert.equal(
       fileTransformation.copyOutputFilesToInput(
-        "./activity-exchange-file-processing/input-files2",
-        "./activity-exchange-file-processing/output-files"
+        "./activity-exchange-file-processing/input-files2/",
+        "./activity-exchange-file-processing/output-files/internal"
       ),
       null
     );
@@ -57,36 +57,40 @@ describe("getFileNames", function () {
       "The directory doesn't exist"
     );
   });
-
-  it("Given the function receives a directory that contains no files, it should return an error", function () {
-    expect(
-      getFileNames.bind(
-        fileTransformation,
-        "./activity-exchange-file-processing/input-files-test"
-      )
-    ).to.throw("The directory is empty");
-  });
 });
 describe("readFileIntoYamlObject", function () {
   const readFileIntoYamlObject = fileTransformation.__get__(
     "readFileIntoYamlObject"
   );
   it("Given the function receives a file name as a string it should return an object", function () {
-    assert.equal(typeof readFileIntoYamlObject("asset1.yaml"), "object");
+    assert.equal(
+      Array.isArray(
+        readFileIntoYamlObject(
+          "./activity-exchange-file-processing/input-files",
+          "asset1.yaml"
+        )
+      ),
+      true
+    );
   });
 
   it("Given the function receives a file name as a string it should return its data as an object", function () {
-    const result = readFileIntoYamlObject("asset1.yaml");
-    expect(result).to.eql({
-      description: "this is my product",
-      productName: "address finder",
-      team: "integration",
-      filters: {
-        asset_type: "REST API",
-        deprecated: true,
-        visibility: "Internal",
+    const result = readFileIntoYamlObject(
+      "./activity-exchange-file-processing/input-files",
+      "asset1.yaml"
+    );
+    expect(result).to.eql([
+      {
+        description: "this is my product",
+        productName: "address finder",
+        team: "integration",
+        filters: {
+          asset_type: "REST API",
+          deprecated: true,
+          visibility: "Internal",
+        },
       },
-    });
+    ]);
   });
 });
 
@@ -105,13 +109,12 @@ describe("writeObjectToFile", function () {
           "  asset_type: REST API\n" +
           "  deprecated: true\n" +
           "  visibility: Internal\n",
-        "integration-address-finder-test",
-        "./activity-exchange-file-processing/output-files/internal"
+        "integration-address-finder-test.yaml",
+        "./activity-exchange-file-processing/output-files/internal/"
       ),
       null
     );
   });
-
   it("Given the function receives a valid file as an object with public visibility, it should run without an error", function () {
     assert.equal(
       writeObjectToFile(
@@ -125,35 +128,33 @@ describe("writeObjectToFile", function () {
           "  asset_type: REST API\n" +
           "  deprecated: true\n" +
           "  visibility: Public\n",
-        "integration-test",
-        "./activity-exchange-file-processing/output-files/public"
+        "integration-test.yaml",
+        "./activity-exchange-file-processing/output-files/public/"
       ),
       null
     );
   });
-
-  // it("Given the function receives a valid file as an object , it should write to file with the correct fields", function () {
-  //   const testObject = fs.readFileSync(
-  //     "./activity-exchange-file-processing/output-files/internal/integration-address-finder-test.yaml",
-  //     "utf8"
-  //   );
-
-  //   expect(testObject).to.eql(
-  //     "---\n" +
-  //       "deprecated: true\n" +
-  //       "---\n" +
-  //       "description: this is my product\n" +
-  //       "productName: address finder test\n" +
-  //       "team: integration\n" +
-  //       "filters:\n" +
-  //       "  asset_type: REST API\n" +
-  //       "  deprecated: true\n" +
-  //       "  visibility: Public\n",
-  //     "integration-address-finder-test",
-  //     "Public",
-  //     "./activity-exchange-file-processing/output-files"
-  //   );
-  // });
+  it("Given the function receives a valid file as an object , it should write to file with the correct fields", function () {
+    const testObject = fs.readFileSync(
+      "./activity-exchange-file-processing/output-files/internal/integration-address-finder-test.yaml",
+      "utf8"
+    );
+    expect(testObject).to.eql(
+      "---\n" +
+        "deprecated: true\n" +
+        "---\n" +
+        "description: this is my product\n" +
+        "productName: address finder test\n" +
+        "team: integration\n" +
+        "filters:\n" +
+        "  asset_type: REST API\n" +
+        "  deprecated: true\n" +
+        "  visibility: Internal\n",
+      "integration-address-finder-test",
+      "Public",
+      "./activity-exchange-file-processing/output-files"
+    );
+  });
 });
 
 describe("getNewFileName", function () {
@@ -369,47 +370,6 @@ describe("addDeprecation", function () {
   });
 });
 
-describe("removeDeprecation", function () {
-  const removeDeprecation = fileTransformation.__get__("removeDeprecation");
-  it("Given the function receives a file as a string, it should return a string", function () {
-    assert.equal(
-      typeof removeDeprecation(
-        "---\n" +
-          "deprecated: false\n" +
-          "---\n" +
-          "description: this is my product\n" +
-          "productName: address finder test\n" +
-          "team: integration\n" +
-          "filters:\n" +
-          "  asset_type: REST API\n" +
-          "  visibility: Public\n"
-      ),
-      "string"
-    );
-  });
-  it("Given the function receives a file as a string, it should return the string without the deprecated header", function () {
-    assert.equal(
-      removeDeprecation(
-        "---\n" +
-          "deprecated: false\n" +
-          "---\n" +
-          "description: this is my product\n" +
-          "productName: address finder test\n" +
-          "team: integration\n" +
-          "filters:\n" +
-          "  asset_type: REST API\n" +
-          "  visibility: Public\n"
-      ),
-      "description: this is my product\n" +
-        "productName: address finder test\n" +
-        "team: integration\n" +
-        "filters:\n" +
-        "  asset_type: REST API\n" +
-        "  visibility: Public\n"
-    );
-  });
-});
-
 describe("getInputFilename", function () {
   const getInputFilename = fileTransformation.__get__("getInputFilename");
   it("Given the function receives an array of filenames as strings, it should return a string", function () {
@@ -454,8 +414,8 @@ describe("getFilepath", function () {
   it("Given the function receives a valid file as an object with a valid visibility, it should return a string", function () {
     assert.equal(
       typeof getFilepath(
-        "Internal",
-        "./activity-exchange-file-processing/output-files"
+        "./activity-exchange-file-processing/output-files",
+        "Internal"
       ),
       "string"
     );
@@ -463,24 +423,24 @@ describe("getFilepath", function () {
   it("Given the function receives an Internal visibility, it should return the internal filepath as a string", function () {
     assert.equal(
       getFilepath(
-        "Internal",
-        "./activity-exchange-file-processing/output-files"
+        "./activity-exchange-file-processing/output-files",
+        "Internal"
       ),
-      "./activity-exchange-file-processing/output-files/internal"
+      "./activity-exchange-file-processing/output-files/internal/"
     );
   });
   it("Given the function receives a Public visibility, it should return the public filepath as a string", function () {
     assert.equal(
-      getFilepath("Public", "./activity-exchange-file-processing/output-files"),
-      "./activity-exchange-file-processing/output-files/public"
+      getFilepath("./activity-exchange-file-processing/output-files", "Public"),
+      "./activity-exchange-file-processing/output-files/public/"
     );
   });
   it("Given the function receives a null visibility, it should return an error", function () {
     expect(
       getFilepath.bind(
         fileTransformation,
-        null,
-        "./activity-exchange-file-processing/output-files"
+        "./activity-exchange-file-processing/output-files",
+        null
       )
     ).to.throw("Visibility not found");
   });
