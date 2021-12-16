@@ -21,7 +21,7 @@ describe("copyOutputFilesToInput", function () {
   it("Given the function receives an input file path as a string and an output file path as a string, it should return with no errors", function () {
     assert.equal(
       fileTransformation.copyOutputFilesToInput(
-        "./activity-exchange-file-processing/input-files2/",
+        "./activity-exchange-file-processing/input-files-2/",
         "./activity-exchange-file-processing/output-files/internal"
       ),
       null
@@ -443,5 +443,80 @@ describe("getFilepath", function () {
         null
       )
     ).to.throw("Visibility not found");
+  });
+});
+
+describe("compareFolders", function () {
+  it("Given the function receives 2 filepaths as strings, it should return a boolean", function () {
+    assert.equal(
+      typeof fileTransformation.compareFolders([
+        "./activity-exchange-file-processing/output-files/internal",
+        "./activity-exchange-file-processing/input-files",
+      ]),
+      "boolean"
+    );
+  });
+  it("Given the function receives 2 filepaths which contain different files, it should return false", function () {
+    assert.equal(
+      fileTransformation.compareFolders([
+        "./activity-exchange-file-processing/output-file-example",
+        "./activity-exchange-file-processing/input-files",
+      ]),
+      false
+    );
+  });
+  it("Given the function receives 2 filepaths which are both in input format and contain the same file data, it should return true", function () {
+    assert.equal(
+      fileTransformation.compareFolders([
+        "./activity-exchange-file-processing/input-files-2",
+        "./activity-exchange-file-processing/input-files",
+      ]),
+      true
+    );
+  });
+  it("Given the function receives 2 filepaths which are both in input format and contain different file data, it should return false", function () {
+    assert.equal(
+      fileTransformation.compareFolders([
+        "./activity-exchange-file-processing/input-files-3",
+        "./activity-exchange-file-processing/input-files",
+      ]),
+      false
+    );
+  });
+  it("Given the function receives 2 filepaths which are both in output format and contain the same file data, it should return true", function () {
+    assert.equal(
+      fileTransformation.compareFolders([
+        "./activity-exchange-file-processing/output-files-2",
+        "./activity-exchange-file-processing/output-files/internal",
+      ]),
+      true
+    );
+  });
+  it("Given the function receives 2 filepaths which are both in output format and contain different file data, it should return false", function () {
+    assert.equal(
+      fileTransformation.compareFolders([
+        "./activity-exchange-file-processing/output-files-example",
+        "./activity-exchange-file-processing/output-files/internal",
+      ]),
+      false
+    );
+  });
+  it("Given the function receives 2 filepaths one in input format, one in output format and they contain the same file data, it should return true", function () {
+    assert.equal(
+      fileTransformation.compareFolders([
+        "./activity-exchange-file-processing/input-files-2",
+        "./activity-exchange-file-processing/output-files/internal",
+      ]),
+      true
+    );
+  });
+  it("Given the function receives 2 filepaths one in input format, one in output format and they contain different file data, it should return false", function () {
+    assert.equal(
+      fileTransformation.compareFolders([
+        "./activity-exchange-file-processing/input-files-2",
+        "./activity-exchange-file-processing/output-files-2",
+      ]),
+      false
+    );
   });
 });
