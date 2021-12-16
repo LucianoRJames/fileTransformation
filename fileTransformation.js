@@ -102,6 +102,18 @@ const getFilepath = (outputPath, visibility) => {
     throw new Error("Visibility not found");
   }
 };
+const compareFolders = (filepath1, filepath2) => {
+  const folder1FileNames = getFileNames(filepath1);
+  const folder2FileNames = getFileNames(filepath2);
+  const folder1FilesAsObjects = [];
+  const folder2FilesAsObjects = [];
+  folder1FileNames.forEach((filename) => {
+    folder1FilesAsObjects.push(readFileIntoYamlObject(filepath1, filename)[0]);
+  });
+  folder2FileNames.forEach((filename) => {
+    folder2FilesAsObjects.push(readFileIntoYamlObject(filepath2, filename)[0]);
+  });
+};
 
 module.exports = {
   copyInputFilesToOutput,

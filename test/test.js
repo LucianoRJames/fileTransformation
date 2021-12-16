@@ -62,7 +62,7 @@ describe("readFileIntoYamlObject", function () {
   const readFileIntoYamlObject = fileTransformation.__get__(
     "readFileIntoYamlObject"
   );
-  it("Given the function receives a file name as a string it should return an object", function () {
+  it("Given the function receives a file name and a path as strings it should return an array", function () {
     assert.equal(
       Array.isArray(
         readFileIntoYamlObject(
@@ -74,7 +74,7 @@ describe("readFileIntoYamlObject", function () {
     );
   });
 
-  it("Given the function receives a file name as a string it should return its data as an object", function () {
+  it("Given the function receives a file name and a path as strings it should return its data as an object", function () {
     const result = readFileIntoYamlObject(
       "./activity-exchange-file-processing/input-files",
       "asset1.yaml"
@@ -517,6 +517,33 @@ describe("compareFolders", function () {
         "./activity-exchange-file-processing/output-files-2",
       ]),
       false
+    );
+  });
+});
+
+describe("readFile", function () {
+  const readFile = fileTransformation.__get__("readFile");
+  it("Given the function receives a file name and a path as strings it should return a string", function () {
+    assert.equal(
+      typeof readFile(
+        "./activity-exchange-file-processing/input-files",
+        "asset1.yaml"
+      ),
+      "string"
+    );
+  });
+  it("Given the function receives a file name and a path as strings it should the file data as a string", function () {
+    assert.equal(
+      typeof readFile(
+        "./activity-exchange-file-processing/input-files",
+        "asset1.yaml"
+      ),
+      "description: this is my product\n" +
+        "productName: address finder test\n" +
+        "team: integration\n" +
+        "filters:\n" +
+        "  asset_type: REST API\n" +
+        "  visibility: Public\n"
     );
   });
 });
