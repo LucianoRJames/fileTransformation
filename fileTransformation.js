@@ -115,6 +115,10 @@ const compareFolders = (filepath1, filepath2) => {
   });
 };
 
+const readFile = (filepath, filename) => {
+  return fs.readFileSync(filepath + "/" + filename, "utf8");
+};
+
 module.exports = {
   copyInputFilesToOutput,
   copyOutputFilesToInput,

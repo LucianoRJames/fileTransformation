@@ -534,16 +534,17 @@ describe("readFile", function () {
   });
   it("Given the function receives a file name and a path as strings it should the file data as a string", function () {
     assert.equal(
-      typeof readFile(
+      readFile(
         "./activity-exchange-file-processing/input-files",
         "asset1.yaml"
       ),
-      "description: this is my product\n" +
-        "productName: address finder test\n" +
+      'description: "this is my product"\n' +
         "team: integration\n" +
-        "filters:\n" +
-        "  asset_type: REST API\n" +
-        "  visibility: Public\n"
+        "productName: address finder\n" +
+        "filters: #filter options\n" +
+        '  asset_type: "REST API"\n' +
+        "  deprecated: true\n" +
+        '  visibility: "Internal"\n'
     );
   });
 });
