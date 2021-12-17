@@ -108,11 +108,29 @@ const compareFolders = (filepath1, filepath2) => {
   const folder1FilesAsObjects = [];
   const folder2FilesAsObjects = [];
   folder1FileNames.forEach((filename) => {
-    folder1FilesAsObjects.push(readFileIntoYamlObject(filepath1, filename)[0]);
+    folder1FilesAsObjects.push(readFile(filepath1, filename));
   });
   folder2FileNames.forEach((filename) => {
-    folder2FilesAsObjects.push(readFileIntoYamlObject(filepath2, filename)[0]);
+    folder2FilesAsObjects.push(readFile(filepath2, filename));
   });
+  folder1FilesAsObjects.sort();
+  folder2FilesAsObjects.sort();
+  let equivalent = false;
+  let folder1FilesAsString = JSON.stringify(folder1FilesAsObjects);
+  let folder2FilesAsString = JSON.stringify(folder2FilesAsObjects);
+  //removing whitespace, \n, comments and \ from the strings
+  folder1FilesAsString = folder1FilesAsString.replace(
+    /#[\w|\d|\s]+\\n|\\n|\\|"|\s/g,
+    ""
+  );
+  folder2FilesAsString = folder2FilesAsString.replace(
+    /#[\w|\d|\s]+\\n|\\n|\\|"|\s/g,
+    ""
+  );
+  if (folder1FilesAsString === folder2FilesAsString) {
+    equivalent = true;
+  }
+  return equivalent;
 };
 
 const readFile = (filepath, filename) => {
@@ -122,4 +140,5 @@ const readFile = (filepath, filename) => {
 module.exports = {
   copyInputFilesToOutput,
   copyOutputFilesToInput,
+  compareFolders,
 };

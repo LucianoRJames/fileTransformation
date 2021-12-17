@@ -1,0 +1,7 @@
+description: this is my product
+team: integration
+productName: address finder
+filters:
+  asset_type: REST API
+  deprecated: true
+  visibility: Internal

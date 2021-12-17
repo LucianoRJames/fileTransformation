@@ -1,0 +1,9 @@
+---
+deprecated: false
+---
+description: this product is used to verify valid bank account details
+team: integration
+productName: bank validation
+filters:
+  asset_type: REST API
+  visibility: Public

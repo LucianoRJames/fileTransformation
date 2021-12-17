@@ -17,14 +17,89 @@ describe("copyInputFilesToOutput", function () {
   });
 });
 
-describe("copyOutputFilesToInput", function () {
-  it("Given the function receives an input file path as a string and an output file path as a string, it should return with no errors", function () {
+// describe("copyOutputFilesToInput", function () {
+//   it("Given the function receives an input file path as a string and an output file path as a string, it should return with no errors", function () {
+//     assert.equal(
+//       fileTransformation.copyOutputFilesToInput(
+//         "./activity-exchange-file-processing/input-files-2/",
+//         "./activity-exchange-file-processing/output-files/internal"
+//       ),
+//       null
+//     );
+//   });
+// });
+
+describe("compareFolders", function () {
+  it("Given the function receives 2 filepaths as strings, it should return a boolean", function () {
     assert.equal(
-      fileTransformation.copyOutputFilesToInput(
-        "./activity-exchange-file-processing/input-files-2/",
+      typeof fileTransformation.compareFolders(
+        "./activity-exchange-file-processing/output-files/internal/",
+        "./activity-exchange-file-processing/input-files"
+      ),
+      "boolean"
+    );
+  });
+  it("Given the function receives 2 filepaths which contain different files, it should return false", function () {
+    assert.equal(
+      fileTransformation.compareFolders(
+        "./activity-exchange-file-processing/output-file-example/internal",
+        "./activity-exchange-file-processing/input-files"
+      ),
+      false
+    );
+  });
+  it("Given the function receives 2 filepaths which are both in input format and contain the same file data, it should return true", function () {
+    assert.equal(
+      fileTransformation.compareFolders(
+        "./activity-exchange-file-processing/input-files-2",
+        "./activity-exchange-file-processing/input-files"
+      ),
+      true
+    );
+  });
+  it("Given the function receives 2 filepaths which are both in input format and contain different file data, it should return false", function () {
+    assert.equal(
+      fileTransformation.compareFolders(
+        "./activity-exchange-file-processing/input-files-3",
+        "./activity-exchange-file-processing/input-files"
+      ),
+      false
+    );
+  });
+  it("Given the function receives 2 filepaths which are both in output format and contain the same file data, it should return true", function () {
+    assert.equal(
+      fileTransformation.compareFolders(
+        "./activity-exchange-file-processing/output-files-2",
         "./activity-exchange-file-processing/output-files/internal"
       ),
-      null
+      true
+    );
+  });
+  it("Given the function receives 2 filepaths which are both in output format and contain different file data, it should return false", function () {
+    assert.equal(
+      fileTransformation.compareFolders(
+        "./activity-exchange-file-processing/output-files-example/internal",
+        "./activity-exchange-file-processing/output-files/internal"
+      ),
+      false
+    );
+  });
+  it("Given the function receives 2 filepaths one in input format, one in output format and they contain the same file data, it should return true", function () {
+    assert.equal(
+      fileTransformation.compareFolders(
+        "./activity-exchange-file-processing/input-files-2",
+        "./activity-exchange-file-processing/output-files/internal"
+      ),
+      true
+    );
+  });
+  it("Given the function receives 2 filepaths one in input format, one in output format and they contain different file data, it should return false", function () {
+    assert.equal(
+      fileTransformation.compareFolders(
+        "./activity-exchange-file-processing/input-files-2",
+        "./activity-exchange-file-processing/output-files-2"
+      ),
+      false
     );
   });
 });
@@ -94,68 +169,68 @@ describe("readFileIntoYamlObject", function () {
   });
 });
 
-describe("writeObjectToFile", function () {
-  const writeObjectToFile = fileTransformation.__get__("writeObjectToFile");
-  it("Given the function receives a valid file as an object with internal visibility, it should run without an error", function () {
-    assert.equal(
-      writeObjectToFile(
-        "---\n" +
-          "deprecated: true\n" +
-          "---\n" +
-          "description: this is my product\n" +
-          "productName: address finder test\n" +
-          "team: integration\n" +
-          "filters:\n" +
-          "  asset_type: REST API\n" +
-          "  deprecated: true\n" +
-          "  visibility: Internal\n",
-        "integration-address-finder-test.yaml",
-        "./activity-exchange-file-processing/output-files/internal/"
-      ),
-      null
-    );
-  });
-  it("Given the function receives a valid file as an object with public visibility, it should run without an error", function () {
-    assert.equal(
-      writeObjectToFile(
-        "---\n" +
-          "deprecated: true\n" +
-          "---\n" +
-          "description: this is my product\n" +
-          "productName: test\n" +
-          "team: integration\n" +
-          "filters:\n" +
-          "  asset_type: REST API\n" +
-          "  deprecated: true\n" +
-          "  visibility: Public\n",
-        "integration-test.yaml",
-        "./activity-exchange-file-processing/output-files/public/"
-      ),
-      null
-    );
-  });
-  it("Given the function receives a valid file as an object , it should write to file with the correct fields", function () {
-    const testObject = fs.readFileSync(
-      "./activity-exchange-file-processing/output-files/internal/integration-address-finder-test.yaml",
-      "utf8"
-    );
-    expect(testObject).to.eql(
-      "---\n" +
-        "deprecated: true\n" +
-        "---\n" +
-        "description: this is my product\n" +
-        "productName: address finder test\n" +
-        "team: integration\n" +
-        "filters:\n" +
-        "  asset_type: REST API\n" +
-        "  deprecated: true\n" +
-        "  visibility: Internal\n",
-      "integration-address-finder-test",
-      "Public",
-      "./activity-exchange-file-processing/output-files"
-    );
-  });
-});
+// describe("writeObjectToFile", function () {
+//   const writeObjectToFile = fileTransformation.__get__("writeObjectToFile");
+//   it("Given the function receives a valid file as an object with internal visibility, it should run without an error", function () {
+//     assert.equal(
+//       writeObjectToFile(
+//         "---\n" +
+//           "deprecated: true\n" +
+//           "---\n" +
+//           "description: this is my product\n" +
+//           "productName: address finder test\n" +
+//           "team: integration\n" +
+//           "filters:\n" +
+//           "  asset_type: REST API\n" +
+//           "  deprecated: true\n" +
+//           "  visibility: Internal\n",
+//         "integration-address-finder-test.yaml",
+//         "./activity-exchange-file-processing/output-files/internal/"
+//       ),
+//       null
+//     );
+//   });
+//   it("Given the function receives a valid file as an object with public visibility, it should run without an error", function () {
+//     assert.equal(
+//       writeObjectToFile(
+//         "---\n" +
+//           "deprecated: true\n" +
+//           "---\n" +
+//           "description: this is my product\n" +
+//           "productName: test\n" +
+//           "team: integration\n" +
+//           "filters:\n" +
+//           "  asset_type: REST API\n" +
+//           "  deprecated: true\n" +
+//           "  visibility: Public\n",
+//         "integration-test.yaml",
+//         "./activity-exchange-file-processing/output-files/public/"
+//       ),
+//       null
+//     );
+//   });
+//   it("Given the function receives a valid file as an object , it should write to file with the correct fields", function () {
+//     const testObject = fs.readFileSync(
+//       "./activity-exchange-file-processing/output-files/internal/integration-address-finder-test.yaml",
+//       "utf8"
+//     );
+//     expect(testObject).to.eql(
+//       "---\n" +
+//         "deprecated: true\n" +
+//         "---\n" +
+//         "description: this is my product\n" +
+//         "productName: address finder test\n" +
+//         "team: integration\n" +
+//         "filters:\n" +
+//         "  asset_type: REST API\n" +
+//         "  deprecated: true\n" +
+//         "  visibility: Internal\n",
+//       "integration-address-finder-test",
+//       "Public",
+//       "./activity-exchange-file-processing/output-files"
+//     );
+//   });
+// });
 
 describe("getNewFileName", function () {
   const getNewFileName = fileTransformation.__get__("getNewFileName");
@@ -443,81 +518,6 @@ describe("getFilepath", function () {
         null
       )
     ).to.throw("Visibility not found");
-  });
-});
-
-describe("compareFolders", function () {
-  it("Given the function receives 2 filepaths as strings, it should return a boolean", function () {
-    assert.equal(
-      typeof fileTransformation.compareFolders([
-        "./activity-exchange-file-processing/output-files/internal",
-        "./activity-exchange-file-processing/input-files",
-      ]),
-      "boolean"
-    );
-  });
-  it("Given the function receives 2 filepaths which contain different files, it should return false", function () {
-    assert.equal(
-      fileTransformation.compareFolders([
-        "./activity-exchange-file-processing/output-file-example",
-        "./activity-exchange-file-processing/input-files",
-      ]),
-      false
-    );
-  });
-  it("Given the function receives 2 filepaths which are both in input format and contain the same file data, it should return true", function () {
-    assert.equal(
-      fileTransformation.compareFolders([
-        "./activity-exchange-file-processing/input-files-2",
-        "./activity-exchange-file-processing/input-files",
-      ]),
-      true
-    );
-  });
-  it("Given the function receives 2 filepaths which are both in input format and contain different file data, it should return false", function () {
-    assert.equal(
-      fileTransformation.compareFolders([
-        "./activity-exchange-file-processing/input-files-3",
-        "./activity-exchange-file-processing/input-files",
-      ]),
-      false
-    );
-  });
-  it("Given the function receives 2 filepaths which are both in output format and contain the same file data, it should return true", function () {
-    assert.equal(
-      fileTransformation.compareFolders([
-        "./activity-exchange-file-processing/output-files-2",
-        "./activity-exchange-file-processing/output-files/internal",
-      ]),
-      true
-    );
-  });
-  it("Given the function receives 2 filepaths which are both in output format and contain different file data, it should return false", function () {
-    assert.equal(
-      fileTransformation.compareFolders([
-        "./activity-exchange-file-processing/output-files-example",
-        "./activity-exchange-file-processing/output-files/internal",
-      ]),
-      false
-    );
-  });
-  it("Given the function receives 2 filepaths one in input format, one in output format and they contain the same file data, it should return true", function () {
-    assert.equal(
-      fileTransformation.compareFolders([
-        "./activity-exchange-file-processing/input-files-2",
-        "./activity-exchange-file-processing/output-files/internal",
-      ]),
-      true
-    );
-  });
-  it("Given the function receives 2 filepaths one in input format, one in output format and they contain different file data, it should return false", function () {
-    assert.equal(
-      fileTransformation.compareFolders([
-        "./activity-exchange-file-processing/input-files-2",
-        "./activity-exchange-file-processing/output-files-2",
-      ]),
-      false
-    );
   });
 });
 

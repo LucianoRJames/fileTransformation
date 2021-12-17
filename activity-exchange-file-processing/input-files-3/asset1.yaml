@@ -1,0 +1,6 @@
+productName: athis is different
+team: arus
+filters:
+  asset_type: SOAP API
+  deprecated: false
+  visibility: Internal
