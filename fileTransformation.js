@@ -105,37 +105,20 @@ const getFilepath = (outputPath, visibility) => {
 const compareFolders = (filepath1, filepath2) => {
   const folder1FileNames = getFileNames(filepath1);
   const folder2FileNames = getFileNames(filepath2);
-  const folder1FilesAsObjects = [];
-  const folder2FilesAsObjects = [];
+  const folder1Files = [];
+  const folder2Files = [];
   folder1FileNames.forEach((filename) => {
-    folder1FilesAsObjects.push(readFile(filepath1, filename));
+    folder1Files.push(readFile(filepath1, filename));
   });
   folder2FileNames.forEach((filename) => {
-    folder2FilesAsObjects.push(readFile(filepath2, filename));
+    folder2Files.push(readFile(filepath2, filename));
   });
 
   let equivalent = false;
-  let folder1FilesAsString = JSON.stringify(folder1FilesAsObjects);
-  let folder2FilesAsString = JSON.stringify(folder2FilesAsObjects);
-  folder1FilesAsString = folder1FilesAsString.replace(
-    /deprecated: true|deprecated: false|---/g,
-    ""
-  );
-  folder2FilesAsString = folder2FilesAsString.replace(
-    /deprecated: true|deprecated: false|---/g,
-    ""
-  );
-  folder1FilesAsObjects = JSON.parse(folder1FilesAsString);
-  folder2FilesAsObjects = JSON.parse(folder2FilesAsString);
-  folder1FilesAsObjects.sort();
-  folder2FilesAsObjects.sort();
-  folder1FilesAsString = JSON.stringify(folder1FilesAsObjects);
-  folder2FilesAsString = JSON.stringify(folder2FilesAsObjects);
-  //removing whitespace, \n, comments and \ from the strings
-  let fileParsingRegex = /#[\w|\d|\s]+\\n|\\n|\\|"|\s/g;
-  folder1FilesAsString = folder1FilesAsString.replace(fileParsingRegex, "");
-  folder2FilesAsString = folder2FilesAsString.replace(fileParsingRegex, "");
-  if (folder1FilesAsString === folder2FilesAsString) {
+
+  const folder1Parsed = parseStringForComparison(folder1Files);
+  const folder2Parsed = parseStringForComparison(folder2Files);
+  if (folder1Parsed === folder2Parsed) {
     equivalent = true;
   }
   return equivalent;
@@ -143,6 +126,21 @@ const compareFolders = (filepath1, filepath2) => {
 
 const readFile = (filepath, filename) => {
   return fs.readFileSync(filepath + "/" + filename, "utf8");
+};
+
+const parseStringForComparison = (files) => {
+  let filesAsString = JSON.stringify(files);
+  filesAsString = filesAsString.replace(
+    /deprecated: true|deprecated: false|---/g,
+    ""
+  );
+  let filesAsObjects = JSON.parse(filesAsString);
+  filesAsObjects.sort();
+  filesAsString = JSON.stringify(filesAsObjects);
+  //removing whitespace, \n, comments and \ from the strings
+  let fileParsingRegex = /#[\w|\d|\s]+\\n|\\n|\\|"|\s/g;
+  filesAsString = filesAsString.replace(fileParsingRegex, "");
+  return filesAsString;
 };
 
 module.exports = {

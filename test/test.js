@@ -616,7 +616,7 @@ describe("parseStringForComparison", function () {
           "  asset_type: REST API\n" +
           "  visibility: Public\n",
       ]),
-      "description:thisdataisdifferentteam:cisproductName:getbenefitdatafilters:asset_type:SOAPAPIvisibility:Public,description:thisismyproductteam:integrationproductName:addressfinderfilters:asset_type:RESTAPIvisibility:Internal,description:thisproductisusedtoverifyvalidbankaccountdetailsteam:integrationproductName:bankvalidationfilters:asset_type:RESTAPIvisibility:Public,productName:athisisdifferentteam:arusfilters:asset_type:SOAPAPIvisibility:Internal"
+      "[description:thisdataisdifferentteam:cisproductName:getbenefitdatafilters:asset_type:SOAPAPIvisibility:Public,description:thisismyproductteam:integrationproductName:addressfinderfilters:asset_type:RESTAPIvisibility:Internal,description:thisproductisusedtoverifyvalidbankaccountdetailsteam:integrationproductName:bankvalidationfilters:asset_type:RESTAPIvisibility:Public,productName:athisisdifferentteam:arusfilters:asset_type:SOAPAPIvisibility:Internal]"
     );
   });
 
@@ -662,7 +662,7 @@ describe("parseStringForComparison", function () {
           "  asset_type: REST API\n" +
           "  visibility: Public\n",
       ]),
-      "description:thisismyproductteam:cisproductName:getbenefithistoryfilters:asset_type:SOAPAPIvisibility:Public,description:thisismyproductteam:integrationproductName:addressfinderfilters:asset_type:RESTAPIvisibility:Internal,description:thisproductisusedtoverifyvalidbankaccountdetailsteam:integrationproductName:bankvalidationfilters:asset_type:RESTAPIvisibility:Public,productName:addresslookupserviceteam:arusfilters:asset_type:SOAPAPIvisibility:Internal"
+      "[description:thisismyproductteam:cisproductName:getbenefithistoryfilters:asset_type:SOAPAPIvisibility:Public,description:thisismyproductteam:integrationproductName:addressfinderfilters:asset_type:RESTAPIvisibility:Internal,description:thisproductisusedtoverifyvalidbankaccountdetailsteam:integrationproductName:bankvalidationfilters:asset_type:RESTAPIvisibility:Public,productName:addresslookupserviceteam:arusfilters:asset_type:SOAPAPIvisibility:Internal]"
     );
   });
 });
