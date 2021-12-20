@@ -548,3 +548,121 @@ describe("readFile", function () {
     );
   });
 });
+
+describe("parseStringForComparison", function () {
+  const parseStringForComparison = fileTransformation.__get__(
+    "parseStringForComparison"
+  );
+  it("Given the function receives an array of strings, it should return a string", function () {
+    assert.equal(
+      typeof parseStringForComparison([
+        "productName: athis is different\n" +
+          "team: arus\n" +
+          "filters:\n" +
+          "  asset_type: SOAP API\n" +
+          "  deprecated: false\n" +
+          "  visibility: Internal\n",
+        "description: this data is different\n" +
+          "team: cis\n" +
+          "productName: get benefit data\n" +
+          "filters:\n" +
+          "  asset_type: SOAP API\n" +
+          "  deprecated: true\n" +
+          "  visibility: Public\n",
+        "description: this is my product\n" +
+          "team: integration\n" +
+          "productName: address finder\n" +
+          "filters:\n" +
+          "  asset_type: REST API\n" +
+          "  deprecated: true\n" +
+          "  visibility: Internal\n",
+        "description: this product is used to verify valid bank account details\n" +
+          "team: integration\n" +
+          "productName: bank validation\n" +
+          "filters:\n" +
+          "  asset_type: REST API\n" +
+          "  visibility: Public\n",
+      ]),
+      "string"
+    );
+  });
+  it("Given the function receives a file as an object without a deprecated header, it should return to file as a string without quotes, linebreak characters, whitespace, backslashes and comments", function () {
+    assert.equal(
+      parseStringForComparison([
+        "productName: athis is different\n" +
+          "team: arus\n" +
+          "filters:\n" +
+          "  asset_type: SOAP API\n" +
+          "  deprecated: false\n" +
+          "  visibility: Internal\n",
+        "description: this data is different\n" +
+          "team: cis\n" +
+          "productName: get benefit data\n" +
+          "filters:\n" +
+          "  asset_type: SOAP API\n" +
+          "  deprecated: true\n" +
+          "  visibility: Public\n",
+        "description: this is my product\n" +
+          "team: integration\n" +
+          "productName: address finder\n" +
+          "filters:\n" +
+          "  asset_type: REST API\n" +
+          "  deprecated: true\n" +
+          "  visibility: Internal\n",
+        "description: this product is used to verify valid bank account details\n" +
+          "team: integration\n" +
+          "productName: bank validation\n" +
+          "filters:\n" +
+          "  asset_type: REST API\n" +
+          "  visibility: Public\n",
+      ]),
+      "description:thisdataisdifferentteam:cisproductName:getbenefitdatafilters:asset_type:SOAPAPIvisibility:Public,description:thisismyproductteam:integrationproductName:addressfinderfilters:asset_type:RESTAPIvisibility:Internal,description:thisproductisusedtoverifyvalidbankaccountdetailsteam:integrationproductName:bankvalidationfilters:asset_type:RESTAPIvisibility:Public,productName:athisisdifferentteam:arusfilters:asset_type:SOAPAPIvisibility:Internal"
+    );
+  });
+
+  it("Given the function receives a file as an object with a deprecated header, it should return to file as a string without quotes, linebreak characters, whitespace, backslashes, comments and the deprecated header", function () {
+    assert.equal(
+      parseStringForComparison([
+        "---\n" +
+          "deprecated: false\n" +
+          "---\n" +
+          "productName: address lookup service\n" +
+          "team: arus\n" +
+          "filters:\n" +
+          "  asset_type: SOAP API\n" +
+          "  deprecated: false\n" +
+          "  visibility: Internal\n",
+        "---\n" +
+          "deprecated: true\n" +
+          "---\n" +
+          "description: this is my product\n" +
+          "team: cis\n" +
+          "productName: get benefit history\n" +
+          "filters:\n" +
+          "  asset_type: SOAP API\n" +
+          "  deprecated: true\n" +
+          "  visibility: Public\n",
+        "---\n" +
+          "deprecated: true\n" +
+          "---\n" +
+          "description: this is my product\n" +
+          "team: integration\n" +
+          "productName: address finder\n" +
+          "filters:\n" +
+          "  asset_type: REST API\n" +
+          "  deprecated: true\n" +
+          "  visibility: Internal\n",
+        "---\n" +
+          "deprecated: false\n" +
+          "---\n" +
+          "description: this product is used to verify valid bank account details\n" +
+          "team: integration\n" +
+          "productName: bank validation\n" +
+          "filters:\n" +
+          "  asset_type: REST API\n" +
+          "  visibility: Public\n",
+      ]),
+      "description:thisismyproductteam:cisproductName:getbenefithistoryfilters:asset_type:SOAPAPIvisibility:Public,description:thisismyproductteam:integrationproductName:addressfinderfilters:asset_type:RESTAPIvisibility:Internal,description:thisproductisusedtoverifyvalidbankaccountdetailsteam:integrationproductName:bankvalidationfilters:asset_type:RESTAPIvisibility:Public,productName:addresslookupserviceteam:arusfilters:asset_type:SOAPAPIvisibility:Internal"
+    );
+  });
+});
