@@ -78,7 +78,7 @@ describe("compareFolders", function () {
   it("Given the function receives 2 filepaths which are both in output format and contain different file data, it should return false", function () {
     assert.equal(
       fileTransformation.compareFolders(
-        "./activity-exchange-file-processing/output-files-example/internal",
+        "./activity-exchange-file-processing/output-file-example/internal",
         "./activity-exchange-file-processing/output-files/internal"
       ),
       false
@@ -96,7 +96,7 @@ describe("compareFolders", function () {
   it("Given the function receives 2 filepaths one in input format, one in output format and they contain different file data, it should return false", function () {
     assert.equal(
       fileTransformation.compareFolders(
-        "./activity-exchange-file-processing/input-files-2",
+        "./activity-exchange-file-processing/input-files-3",
         "./activity-exchange-file-processing/output-files-2"
       ),
       false
